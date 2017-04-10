@@ -1,0 +1,111 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Facelet Title</title>
+</h:head>
+<h:body>
+    <f:view>
+
+        <h:form>
+
+            <table border="1" align="top">
+                <tr align="top">
+                    <td>
+                        <h:outputLabel value="Last name: "/><br/>
+                        <h:outputLabel value="First name: "/><br/>
+                        <h:outputLabel value="Middle name: "/><br/>
+                        <h:outputLabel value="PASSPORT: "/><br/>
+                        <h:outputLabel value="Phone: "/><br/>
+                        <h:outputLabel value="Birthday: "/><br/>
+                        <h:outputLabel value="Allergy: "/><br/>
+                    </td>
+                    <td>
+                        <h:inputText value="#{patientBean.currentPatient.lastName}"/><br/>
+                        <h:inputText value="#{patientBean.currentPatient.firstName}"/><br/>
+                        <h:inputText value="#{patientBean.currentPatient.middleName}"/><br/>
+                        <h:inputText value="#{patientBean.currentPatient.passport}"/><br/>
+                        <h:inputText value="#{patientBean.currentPatient.phoneNumber}"/><br/>
+                        <h:inputText value="#{patientBean.currentPatient.birthday}"/><br/>
+                        <h:inputTextarea cols="20" rows="10" value="#{patientBean.currentPatient.allergy}"/><br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h:outputLabel value="City: "/><br/>
+                        <h:outputLabel value="Street: "/><br/>
+                        <h:outputLabel value="House: "/><br/>
+                        <h:outputLabel value="Apartment: "/><br/>
+                    </td>
+                    <td>
+                        <h:inputText value="#{patientBean.currentAddress.city}"/><br/>
+                        <h:inputText value="#{patientBean.currentAddress.street}"/><br/>
+                        <h:inputText value="#{patientBean.currentAddress.house}"/><br/>
+                        <h:inputText value="#{patientBean.currentAddress.apartment}"/><br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        New petient info(update):<br/>
+                        <h:outputLabel value="Last name: "/> <h:inputText value="#{patientBean.updatePatient.lastName}"/><br/>
+                        <h:outputLabel value="First name: "/> <h:inputText value="#{patientBean.updatePatient.firstName}"/><br/>
+                        <h:outputLabel value="Middle name: "/> <h:inputText value="#{patientBean.updatePatient.middleName}"/><br/>
+                        <h:outputLabel value="PASSPORT: "/> <h:inputText value="#{patientBean.updatePatient.passport}"/><br/>
+                        <h:outputLabel value="Phone: "/> <h:inputText value="#{patientBean.updatePatient.phoneNumber}"/><br/>
+                        <h:outputLabel value="Allergy: "/> <h:inputText value="#{patientBean.updatePatient.allergy}"/><br/>
+                    </td>
+                </tr>
+            </table>
+
+            <h:commandButton value="insert" action="#{patientBean.insertPatient}">
+                <f:ajax execute="@form" render="@form"/>
+            </h:commandButton>
+            <h:commandButton value="search">
+               <f:ajax render="zxc" execute="@form"/>
+            </h:commandButton>
+            <h:commandButton value="update" action="#{patientBean.updateOldPatient}">
+                <f:ajax render="outSearchedPatient" execute="@form"/>
+            </h:commandButton>
+
+            <h:dataTable id="zxc" value="#{patientBean.patient}" var="list">
+                <h:column>
+                    #{list.lastName}
+                </h:column>
+                <h:column>
+                    #{list.middleName}
+                </h:column>
+                <h:column>
+                    #{list.passport}
+                </h:column>
+            </h:dataTable>
+
+           <!-- <br/>
+           <h:selectOneMenu id="selectOne" value="#{patientBean.currentAddress.street}">
+               <f:selectItems value="#{patientService.street}"/>
+           </h:selectOneMenu>
+            <br/>
+            <h:commandButton value="list">
+                <f:ajax render="out" execute="selectOne"/>
+            </h:commandButton>
+            <br/>
+            <h:dataTable rendered="true" id="out" value="#{patientBean.patientByStreet}" var="patient">
+                <h:column>
+                    #{patient.lastName}
+                </h:column>
+                <h:column>
+                    #{patient.firstName}
+                </h:column>
+                <h:column>
+                    #{patient.patientAddress.street}
+                </h:column>
+                <h:column>
+                    #{patient.patientAddress.city}
+                </h:column>
+            </h:dataTable>
+-->
+        </h:form>
+
+    </f:view>
+</h:body>
+</html>

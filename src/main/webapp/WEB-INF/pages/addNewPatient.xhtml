@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<head/>
+<body>
+    Add new pacient, fill fields
+<table border="1">
+
+    <h:form>
+
+        <!-- patient form information (lastname, firstname, middlename, birthday) -->
+        <ui:insert name="patientForm">
+            <ui:include src="../template/patientForm.xhtml"/>
+        </ui:insert>
+
+        <!-- add fields: phoneNumber and address-->
+        <tr>
+            <td>
+                <h:outputText value="Phone number: "/>
+            </td>
+            <td>
+                <h:inputText value="#{patientBean.currentPatient.phoneNumber}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h:outputText value="Address: "/>
+            </td>
+            <td>
+                <h:inputTextarea value="#{patientBean.currentPatient.addres}" cols="20" rows="5"/>
+            </td>
+        </tr>
+
+        <!-- action -->
+        <tr>
+            <td>
+                <!-- перерисовать саму себя
+
+                -->
+                <h:commandButton value="Add pacient">
+                  <f:ajax  event="click" render="@all" execute=""/>
+                </h:commandButton>
+
+                <h:commandButton value="Back" action="welcome"/>
+
+            </td>
+        </tr>
+
+    </h:form>
+
+</table>
+</body>
+</html>

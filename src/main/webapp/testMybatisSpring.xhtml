@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+>
+
+<h:head></h:head>
+<h:body>
+
+    <f:view>
+
+        <h:form>
+
+            <table>
+                <tr>
+                    <td>
+                        <h:outputLabel value="Last name:"/><br/>
+                        <h:outputLabel value="First name:"/><br/>
+                        <h:outputLabel value="Middle name:"/><br/>
+                    </td>
+                    <td>
+                        <h:inputText id="lastName" value="#{personalBean.personal.lastName}"/><br/>
+                        <h:inputText id="firstName" value="#{personalBean.personal.firstName}"/><br/>
+                        <h:inputText id="middleName" value="#{personalBean.personal.middleName}"/><br/>
+                    </td>
+                </tr>
+                <tr><td>
+                    <h:commandButton value="search">
+                        <f:ajax event="click" execute="lastName firstName middleName" render="outByFIO"/>
+                    </h:commandButton>
+                </td></tr>
+                <tr><td>
+                    <h:outputText id="outByFIO" value="#{personalService.getDoctorByFIO(personalBean.personal)}"/>
+                </td></tr>
+            </table>
+
+            <br/>
+            <br/>
+            <br/>
+
+
+            Search patient by id:
+            <h:inputText value="#{patientBean.currentPatient.id_patient}" >
+                <f:ajax render="patientInfo"/>
+            </h:inputText><br/>
+            <h:outputText id="patientInfo" value="#{patientService.getPatientById(patientBean.currentPatient.id_patient)} "/><br/>
+
+            Search personal by id:
+            <h:inputText value="#{personalBean.personal.id_doctor}">
+                <f:ajax render="doctorInfo"/>
+            </h:inputText><br/>
+            <h:outputText id="doctorInfo" value="#{personalService.getDoctorById(personalBean.personal.id_doctor)}"/>
+
+            Search personal by specialization:
+            <h:inputText value="#{personalBean.personal.specialization}">
+                <f:ajax render="personalBySpec"/>
+            </h:inputText><br/>
+            <!-- rewrite-->
+            <h:dataTable id="personalBySpec" value="#{personalService.getDoctorBySpecialization(personalBean.personal.specialization)}" var="doc">
+                <h:column>#{doc.id_doctor}</h:column>
+                <h:column>#{doc.firstName}</h:column>
+                <h:column>#{doc.lastName}</h:column>
+                <h:column>#{doc.middleName}</h:column>
+                <h:column>#{doc.specialization}</h:column>
+            </h:dataTable>
+
+
+            <h4>insert personal</h4><br/>
+            firstName: <h:inputText value="#{personalBean.addedPersonal.firstName}"/><br/>
+            lastName: <h:inputText value="#{personalBean.addedPersonal.lastName}"/><br/>
+            middleName: <h:inputText value="#{personalBean.addedPersonal.middleName}"/><br/>
+            spec: <h:inputText value="#{personalBean.addedPersonal.specialization}"/><br/>
+            pass: <h:inputText value="#{personalBean.addedPersonal.password}"/><br/>
+            <h:commandButton value="inser" action="#{personalService.insertDoctor(personalBean.addedPersonal)}"/>
+            <h:commandButton value="update" action="#{personalService.updateDoctor(personalBean.personal)}"/>
+            <br/>
+
+
+            <h2>delete by id</h2><br/>
+            <h:commandButton value="del" action="#{personalService.deleteDoctor(personalBean.personal.id_doctor)}"/><br/>
+
+
+            <h4>Personal List</h4>
+            <h:dataTable id="personalList" value="#{personalService.allPersonal}" var="personal">
+                <h:column>
+                    <f:facet name="header">Id</f:facet>
+                #{personal.id_doctor}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">First name</f:facet>
+                #{personal.firstName}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Last name</f:facet>
+                #{personal.lastName}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Middle name</f:facet>
+                #{personal.middleName}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Specialization</f:facet>
+                #{personal.specialization}
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </f:view>
+
+</h:body>
+</html>

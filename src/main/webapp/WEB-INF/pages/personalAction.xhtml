@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<body>
+
+    <h:form id="searchDeleteByFIO">
+    <h3>Enter FIO or any of the fields</h3>
+                <table>
+                    <tr>
+                        <td>
+                            <h:outputLabel value="Last name:"/><br/>
+                            <h:outputLabel value="First name:"/><br/>
+                            <h:outputLabel value="Middle name:"/><br/>
+                        </td>
+                        <td>
+                            <h:inputText id="lastNameSearch" value="#{personalBean.personal.lastName}"/><br/>
+                            <h:inputText id="firstNameSearch" value="#{personalBean.personal.firstName}"/><br/>
+                            <h:inputText id="middleNameSearch" value="#{personalBean.personal.middleName}"/><br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <h:commandButton value="search">
+                            <f:ajax event="click" execute="lastNameSearch firstNameSearch middleNameSearch" render="outByFIO"/>
+                        </h:commandButton>
+                        </td>
+                    </tr>
+
+                </table><br/>
+        <h:outputText id="outByFIO" value="#{personalService.getDoctorByFIO(personalBean.personal)}"/>
+    </h:form>
+
+    <h:form id="searchBySpecialization">
+        <h3>Search personal by specialization:</h3>
+        <h:inputText id="specialization" value="#{personalBean.personal.specialization}"/>
+        <h:commandButton value="Search">
+            <f:ajax execute="specialization" event="click" render="personalBySpec"/>
+        </h:commandButton> <br/>
+
+        <h:dataTable id="personalBySpec" value="#{personalService.getDoctorBySpecialization(personalBean.personal.specialization)}" var="doc">
+            <h:column>
+                <f:facet name="header">Last name</f:facet>
+            #{doc.lastName}</h:column>
+            <h:column>
+                <f:facet name="header">First name</f:facet>
+            #{doc.firstName}</h:column>
+            <h:column>
+                <f:facet name="header">Middle name</f:facet>
+            #{doc.middleName}</h:column>
+            <h:column>
+                <f:facet name="header">Specialization</f:facet>
+            #{doc.specialization}</h:column>
+        </h:dataTable>
+    </h:form>
+
+    <h:form id="insertNewDoctor">
+        <h3>insert personal</h3><br/>
+        firstName: <h:inputText value="#{personalBean.addedPersonal.firstName}"/><br/>
+        lastName: <h:inputText value="#{personalBean.addedPersonal.lastName}"/><br/>
+        middleName: <h:inputText value="#{personalBean.addedPersonal.middleName}"/><br/>
+        spec: <h:inputText value="#{personalBean.addedPersonal.specialization}"/><br/>
+        pass: <h:inputText value="#{personalBean.addedPersonal.password}"/><br/>
+        <h:commandButton value="insert" type="submit" action="#{personalService.insertDoctor(personalBean.addedPersonal)}">
+            <f:ajax execute="@form"/>
+        </h:commandButton>
+
+
+        <h:commandButton value="insert2" action="#{personalBean.insertDoctor()}">
+                <f:ajax execute="@form"/>
+        </h:commandButton>
+        <br/>
+    </h:form>
+
+
+</body>
+</html>
+

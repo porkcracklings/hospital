@@ -1,0 +1,89 @@
+<!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="service.PersonalService">
+
+    <resultMap id="personal" type="model.Personal">
+        <id property="id_doctor" column="id"/>
+        <result property="firstName" column="firstName"/>
+        <result property="lastName" column="lastName"/>
+        <result property="middleName" column="middleName"/>
+        <association property="spec" column="specializationId" javaType="model.Specialization" resultMap="selectSpecialization"/>
+    </resultMap>
+
+    <resultMap id="selectId" type="java.lang.Integer">
+        <result property="id" column="id"/>
+    </resultMap>
+
+    <resultMap id="selectSpecialization" type="model.Specialization">
+        <id property="id_specialization" column="id"/>
+        <result property="specializationName" column="specializationName"/>
+    </resultMap>
+
+
+    <select id="getDoctorById" resultMap="personal" parameterType="java.lang.Integer" >
+        select *
+        from personal
+        where personal.id_personal = #{id}
+    </select>
+
+    <!-- refact-->
+    <select id="getDoctorBySpecialization" resultMap="personal" parameterType="java.lang.String" resultType="java.util.List">
+        select  personal.lastName, personal.firstName, personal.middleName, specialization.specializationName from personal
+        join specialization on specialization.id_specialization = personal.id_specialization
+        where specialization.specializationName = 'surgeon'
+    </select>
+
+    <select id="getDoctorByLoginPassword" resultMap="personal" parameterType="model.Personal">
+        SELECT *
+        FROM personal
+        WHERE personal.lastName = #{lastName} AND personal.password = #{password}
+    </select>
+
+
+    <select id="getAllPersonal" resultMap="personal">
+        SELECT *
+        FROM personal
+        inner JOIN specialization ON personal.specializationId = specialization.id
+    </select>
+
+    <!-- add specialization to select-->
+    <select id="getDoctorByFIO" resultMap="personal">
+        SELECT *
+        FROM personal
+        WHERE personal.lastName = #{lastName} OR personal.firstName = #{firstName} OR personal.middleName = #{middleName}
+    </select>
+
+
+
+    <select id="getSpecializationId" parameterType="java.lang.String" resultMap="selectId">
+        SELECT specialization.id FROM specialization
+        WHERE specializationName=#{specialization}
+    </select>
+    <select id="getSpecializationNames" resultMap="selectSpecialization">
+        SELECT specializationName FROM specialization
+    </select>
+    
+    <!-- insert -->
+    <insert id="insertPersonal" useGeneratedKeys="true" parameterType="model.Personal">
+        INSERT INTO personal (lastName, firstName, middleName, specializationId, login, password)
+                  VALUES (#{lastName},#{firstName},#{middleName},#{specializationId},#{login},#{password})
+    </insert>
+
+    <insert id="insertPersonalSpecialization" useGeneratedKeys="true" parameterType="model.Specialization">
+        INSERT INTO specialization (specializationName) VALUES (#{specializationName})
+    </insert>
+
+
+
+    <delete id="deleteDoctorByFio" parameterType="model.Personal">
+        DELETE FROM personal
+        WHERE personal.firstName = #{firstName} AND personal.lastName = #{lastName} AND personal.middleName = #{middleName}
+    </delete>
+    
+    <update id="updateDoctor" parameterType="model.Personal">
+        UPDATE personal
+        SET firstName=#{firstName}, lastName=#{lastName}, middleName=#{middleName}, specialization=#{specialization}
+        WHERE personal.id_personal=#{id_doctor}
+    </update>
+
+
+</mapper>

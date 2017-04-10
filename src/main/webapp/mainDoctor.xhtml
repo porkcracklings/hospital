@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:body>
+
+User: #{personalService.getDoctorByLoginPassword(doctorBean.sessionBean.currentPersonal)}
+
+
+
+    <table border="1">
+    <tr>
+        <!-- doctors menu -->
+        <td id="menu" valign="top" width="21">
+
+            <h:form>
+                <f:ajax render=":content">
+                    <h:outputLabel value="Action with Pacient:"/><br/>
+                    <h:commandButton value="Add new" action="#{pagesBean.setPage('addNewPatient')}"/><br/>
+                    <h:commandButton value="Search" action="#{pagesBean.setPage('searchPatient')}"/><br/>
+                    <h:commandLink value="Action with Personal:" action="#{pagesBean.setPage('personalAction')}"/><br/>
+                </f:ajax>
+                <h:commandButton value="Exit" action="index"/>
+            </h:form>
+        </td>
+
+        <!-- col rendered by AJAX -->
+        <td width="100%">
+            <h:panelGroup id="content" layout="block">
+                <ui:include src="/WEB-INF/pages/#{pagesBean.page}.xhtml"/>
+            </h:panelGroup>
+        </td>
+    </tr>
+
+</table>
+
+</h:body>
+</html>

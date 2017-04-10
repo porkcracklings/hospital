@@ -1,0 +1,111 @@
+<!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="service.PatientService">
+
+    <resultMap id="patient" type="model.Patient">
+        <id property="id_patient" column="id"/>
+        <result property="lastName" column="lastName"/>
+        <result property="firstName" column="firstName"/>
+        <result property="middleName" column="middleName"/>
+        <result property="birthday" column="birthday"/>
+        <result property="passport" column="passport"/>
+        <result property="phoneNumber" column="phoneNumber"/>
+        <result property="allergy" column="allergy"/>
+    </resultMap>
+
+    <resultMap id="patientAddress" type="model.Patient">
+        <id property="id_patient" column="id"/>
+        <result property="firstName" column="firstName"/>
+        <result property="lastName" column="lastName"/>
+        <result property="middleName" column="middleName"/>
+        <result property="birthday" column="birthday"/>
+        <result property="passport" column="passport"/>
+        <result property="phoneNumber" column="phoneNumber"/>
+        <association property="patientAddress" column="addressID" resultMap="addressInfo" javaType="model.Address"/>
+    </resultMap>
+
+    <resultMap id="addressInfo" type="model.Address">
+        <id property="id_address" column="id"/>
+        <result property="city" column="city"/>
+        <result property="street" column="street"/>
+        <result property="house" column="house"/>
+        <result property="apartment" column="apartment"/>
+    </resultMap>
+
+    <resultMap id="selectStreet" type="model.Address">
+        <id property="id_address" column="id"/>
+        <result property="street" column="street"/>
+    </resultMap>
+
+    <resultMap id="selectId" type="java.lang.Integer">
+        <result property="id" column="id"/>
+    </resultMap>
+
+
+
+    <select id="getPatientById" resultMap="patientAddress" parameterType="java.lang.Integer" >
+        select firstName,lastName,middleName,birthday,phoneNumber,city,street,apartment,house
+        from patient
+        JOIN address ON patient.id_address=address.id_address
+        where patient.id_patient = #{id}
+    </select>
+
+    <select id="getPatientByStreet" resultMap="patientAddress" parameterType="model.Address">
+        SELECT *
+        FROM patient
+         INNER JOIN address ON patient.addressID = address.id
+        WHERE address.street=#{street}
+
+    </select>
+
+    <select id="getPatient" resultMap="patient" parameterType="model.Patient">
+        SELECT *
+        FROM patient
+        <where>
+            <if test="lastName != null">
+                AND lastName=#{lastName}
+            </if>
+            <if test="firstName != null">
+                AND firstName=#{firstName}
+            </if>
+            <if test="middleName != null">
+                AND patient.middleName=#{middleName}
+            </if>
+            <if test="passport != null">
+                AND patient.passport=#{passport}
+            </if>
+            <if test="birthday != null">
+                AND patient.birthday=#{birthday}
+            </if>
+        </where>
+    </select>
+
+    <select id="getStreet" resultMap="selectStreet">
+        SELECT DISTINCT address.street FROM address
+    </select>
+
+
+
+    <insert id="insertPatient" useGeneratedKeys="true" parameterType="model.Patient">
+        INSERT INTO patient (lastName, firstName, middleName, passport, phoneNumber, birthday, allergy, addressID)
+        VALUES (#{lastName},#{firstName},#{middleName},#{passport},#{phoneNumber},#{birthday},#{allergy},#{addressId})
+    </insert>
+    <select id="getPatientId" parameterType="model.Patient" resultMap="selectId">
+        SELECT patient.id FROM patient WHERE passport=#{passport}
+    </select>
+
+    <select id="getAddressId" parameterType="model.Address" resultMap="selectId">
+        SELECT address.id FROM address WHERE street=#{street} AND house=#{house} AND address.apartment=#{apartment}
+    </select>
+
+    <insert id="insertPatientAddress" useGeneratedKeys="true" parameterType="model.Address">
+        INSERT INTO address (city, street, house, apartment)
+         VALUES (#{city},#{street},#{house},#{apartment})
+    </insert>
+
+
+    <update id="updatePatient" parameterType="model.Patient">
+        UPDATE patient
+        SET lastName=#{lastName}, firstName=#{firstName}, middleName=#{middleName}, passport=#{passport}, phoneNumber=#{phoneNumber},allergy=#{allergy}
+        WHERE patient.id=#{id_patient}
+    </update>
+</mapper>
